@@ -1,0 +1,35 @@
+﻿<Window x:Class="Shingles.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Сравнение текстов методом простых шинглов" Height="350" Width="525">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Первый текст" HorizontalAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding FirstText}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+        <Label Grid.Row="0" Grid.Column="1" Content="Второй текст" HorizontalAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SecondText}" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,5,0,0">
+            <Label Content="Размер шингла:" Margin="5,0,0,0" />
+            <TextBox Text="{Binding ShingleSize}" Width="50" VerticalContentAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,5,0,0">
+            <Button Content="Рассчитать" Margin="5,0,0,0" Command="{Binding CalculateCommand}" Padding="5,0,5,0"/>
+            <Label Content='Степень похожести: ' />
+            <Label Content="{Binding ResultString}" />
+        </StackPanel>
+
+    </Grid>
+</Window>
