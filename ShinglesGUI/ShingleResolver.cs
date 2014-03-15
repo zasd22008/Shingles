@@ -20,7 +20,7 @@ namespace Shingles
 
         private IList<string> Canonize(string text)
         {
-            var words = text.Split(' ').Select(w => w.Trim(' ', '\t')).Where(w => !String.IsNullOrWhiteSpace(w));
+            var words = text.Split(' ', '\t', '\r', '\n').Select(w => w.Trim(' ', '\t')).Where(w => !String.IsNullOrWhiteSpace(w));
 
             var stopSymbols = new[] {".", ",", "!", "?", ":", ";", "-", "\n", "\r", "(", ")"};
 
@@ -64,7 +64,7 @@ namespace Shingles
  
             for (int i = 0; i < data.Length; i++)
             {
-                builder.Append(i.ToString("x2"));
+                builder.Append(data[i].ToString("x2"));
             }
 
             return builder.ToString();
