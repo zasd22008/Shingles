@@ -9,13 +9,30 @@ namespace Shingles
 {
     public class ShingleResolver:IShingleResolver
     {
+        public const int hash_count = 84;
+
+        private Random _rand;
+        private IEnumerable<Crc32> hash_functions;
+
+        public ShingleResolver()
+        {
+            _rand = new Random(Math.Abs((int)DateTime.Now.Ticks));
+        }
+
         public double Calculate(string firstText, string secondText, int shingleSize)
         {
+            hash_functions = GenerateHashFunctions().ToList();
 
-            var shingles1 = GenerateShingles(Canonize(firstText), shingleSize);
-            var shingles2 = GenerateShingles(Canonize(secondText), shingleSize);
+            var hashes1 = GenerateHashs(Canonize(firstText), shingleSize).ToList();
+            var hashes2 = GenerateHashs(Canonize(secondText), shingleSize).ToList();
 
-            return compare(shingles1, shingles2);
+            return compare(hashes1, hashes2);
+        }
+
+        private IEnumerable<Crc32> GenerateHashFunctions()
+        {
+            for (int i = 0; i < hash_count; i++)
+                yield return new Crc32((uint) _rand.Next(), (uint) _rand.Next());
         }
 
         private IList<string> Canonize(string text)
@@ -39,7 +56,7 @@ namespace Shingles
             return words.Where(w => !stopWords.Contains(w) && !stopSymbols.Contains(w)).ToList();
         }
 
-        private IList<string> GenerateShingles(IList<string> words, int shingleSize)
+        private IEnumerable<string> GenerateHashs(IList<string> words, int shingleSize)
         {
             var length = words.Count - shingleSize + 1;
 
@@ -49,16 +66,14 @@ namespace Shingles
             var shingles = new string[length];
 
             for (int i = 0; i < shingles.Length; i++)
-                shingles[i] = getMD5Hash(String.Join(" ", getSubArray(words, i, shingleSize)));
+                shingles[i] = String.Join(" ", getSubArray(words, i, shingleSize));
 
-            return shingles;
+            return hash_functions.Select(hashFunc => shingles.Select(s => GetHash(s, hashFunc)).Min());
         }
 
-        private string getMD5Hash(string str)
+        private string GetHash(string str, HashAlgorithm hash_func)
         {
-            var md5Hasher = MD5.Create();
- 
-            var data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(str));
+            var data = hash_func.ComputeHash(Encoding.Default.GetBytes(str));
  
             var builder = new StringBuilder();
  
@@ -80,11 +95,11 @@ namespace Shingles
             return selected;
         }
 
-        private double compare(IList<string> shingles1, IList<string> shingles2)
+        private double compare(IEnumerable<string> shingles1, IEnumerable<string> shingles2)
         {
             int sameCount = shingles1.Count(shingles2.Contains);
 
-            return sameCount * 2/(double)(shingles1.Count + shingles2.Count);
+            return sameCount * 2/(double)(shingles1.Count() + shingles2.Count());
         }
     }
 }

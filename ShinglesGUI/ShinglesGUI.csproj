@@ -75,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Crc32.cs" />
     <Compile Include="InSufficientTextLengthException.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ShingleResolver.cs" />
