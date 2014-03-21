@@ -17,7 +17,7 @@ namespace Shingles
         {
             var view = new MainView();
 
-            var viewModel = new MainViewModel(new ShingleResolver());
+            var viewModel = new MainViewModel();
 
             view.DataContext = viewModel;
 

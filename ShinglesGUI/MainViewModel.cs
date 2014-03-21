@@ -17,8 +17,6 @@ namespace Shingles
     {
         #region Приватные поля
 
-        private readonly IShingleResolver _resolver;
-
         #endregion
 
 
@@ -61,6 +59,48 @@ namespace Shingles
             }            
         }
 
+        private bool _isShingles;
+        public bool IsShingles
+        {
+            get { return _isShingles; }
+            set
+            {
+                if (_isShingles != value)
+                {
+                    _isShingles = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _isSuperShingles;
+        public bool IsSuperShingles
+        {
+            get { return _isSuperShingles; }
+            set
+            {
+                if (_isSuperShingles != value)
+                {
+                    _isSuperShingles = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _isMegaShingles;
+        public bool IsMegaShingles
+        {
+            get { return _isMegaShingles; }
+            set
+            {
+                if (_isMegaShingles != value)
+                {
+                    _isMegaShingles = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         #endregion
 
         #region Команды
@@ -74,13 +114,16 @@ namespace Shingles
 
         #region Конструктор
 
-        public MainViewModel(IShingleResolver resolver)
+        public MainViewModel()
         {
-            _resolver = resolver;
 
             CalculateCommand = new DelegateCommand(calculate);
 
             ShingleSize = 10;
+
+            IsShingles = true;
+            IsMegaShingles = false;
+            IsSuperShingles = false;
         }
 
         #endregion
@@ -92,8 +135,8 @@ namespace Shingles
         {
             try
             {
-                Result = _resolver.Calculate(FirstText, SecondText, ShingleSize);
-
+                var _resolver = new ShingleFactory().GetShingleResolver(IsShingles, IsSuperShingles, IsMegaShingles);
+                Result = _resolver.CalculateShingles(FirstText, SecondText, ShingleSize);
                 ResultString = Result.ToString();
             }
             catch (ShingleException se)

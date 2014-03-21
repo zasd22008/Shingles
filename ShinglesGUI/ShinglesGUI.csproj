@@ -77,8 +77,10 @@
     </ApplicationDefinition>
     <Compile Include="Crc32.cs" />
     <Compile Include="InSufficientTextLengthException.cs" />
+    <Compile Include="MegaShingleResolver.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ShingleResolver.cs" />
+    <Compile Include="SuperShingleResolver.cs" />
     <Page Include="MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

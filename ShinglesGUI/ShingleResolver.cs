@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -12,30 +11,45 @@ namespace Shingles
         public const int hash_count = 84;
 
         private Random _rand;
-        private IEnumerable<Crc32> hash_functions;
+        protected IEnumerable<Crc32> hash_functions;
 
         public ShingleResolver()
         {
             _rand = new Random(Math.Abs((int)DateTime.Now.Ticks));
+
+            hash_functions = GenerateHashFunctions().ToList();        
         }
 
-        public double Calculate(string firstText, string secondText, int shingleSize)
+        public virtual double CalculateShingles(string firstText, string secondText, int shingleSize)
         {
-            hash_functions = GenerateHashFunctions().ToList();
-
-            var hashes1 = GenerateHashs(Canonize(firstText), shingleSize).ToList();
-            var hashes2 = GenerateHashs(Canonize(secondText), shingleSize).ToList();
+            var hashes1 = generateHashes(firstText, shingleSize);
+            var hashes2 = generateHashes(secondText, shingleSize);
 
             return compare(hashes1, hashes2);
         }
 
-        private IEnumerable<Crc32> GenerateHashFunctions()
+        protected List<string> generateHashes(string str, int shingleSize)
+        {
+            return GenerateHashs(Canonize(str), shingleSize).ToList();
+        }
+
+        //public double CalculateMegaShingles(string firstText, string secondText, int shingleSize)
+        //{
+        //    hash_functions = GenerateHashFunctions().ToList();
+
+        //    var hashes1 = String.Join(" ", GenerateHashs(Canonize(firstText), shingleSize).OrderBy(s => s).ToList());
+        //    var hashes2 = String.Join(" ", GenerateHashs(Canonize(secondText), shingleSize).OrderBy(s => s).ToList());
+
+        //    return CalculateShingles(hashes1, hashes2, shingleSize);
+        //}
+
+        protected IEnumerable<Crc32> GenerateHashFunctions()
         {
             for (int i = 0; i < hash_count; i++)
                 yield return new Crc32((uint) _rand.Next(), (uint) _rand.Next());
         }
 
-        private IList<string> Canonize(string text)
+        protected IList<string> Canonize(string text)
         {
             var words = text.Split(' ', '\t', '\r', '\n').Select(w => w.Trim(' ', '\t')).Where(w => !String.IsNullOrWhiteSpace(w));
 
@@ -56,7 +70,7 @@ namespace Shingles
             return words.Where(w => !stopWords.Contains(w) && !stopSymbols.Contains(w)).ToList();
         }
 
-        private IEnumerable<string> GenerateHashs(IList<string> words, int shingleSize)
+        protected IEnumerable<string> GenerateHashs(IList<string> words, int shingleSize)
         {
             var length = words.Count - shingleSize + 1;
 
@@ -71,7 +85,7 @@ namespace Shingles
             return hash_functions.Select(hashFunc => shingles.Select(s => GetHash(s, hashFunc)).Min());
         }
 
-        private string GetHash(string str, HashAlgorithm hash_func)
+        protected string GetHash(string str, HashAlgorithm hash_func)
         {
             var data = hash_func.ComputeHash(Encoding.Default.GetBytes(str));
  
@@ -95,7 +109,7 @@ namespace Shingles
             return selected;
         }
 
-        private double compare(IEnumerable<string> shingles1, IEnumerable<string> shingles2)
+        protected double compare(IEnumerable<string> shingles1, IEnumerable<string> shingles2)
         {
             int sameCount = shingles1.Count(shingles2.Contains);
 

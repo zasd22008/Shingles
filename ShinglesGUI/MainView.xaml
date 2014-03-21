@@ -23,6 +23,10 @@
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,5,0,0">
             <Label Content="Размер шингла:" Margin="5,0,0,0" />
             <TextBox Text="{Binding ShingleSize}" Width="50" VerticalContentAlignment="Center"/>
+            <Label>Метод: </Label>
+            <RadioButton Content="Шинглы" VerticalAlignment="Center" IsChecked="{Binding IsShingles}"/>
+            <RadioButton Content="Супер шинглы" VerticalAlignment="Center" IsChecked="{Binding IsSuperShingles}"/>
+            <RadioButton Content="Мега шинглы" VerticalAlignment="Center" IsChecked="{Binding IsMegaShingles}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,5,0,0">
