@@ -1,4 +1,4 @@
-﻿<Window x:Class="Shingles.MainView"
+﻿<Window x:Class="ShinglesGUI.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Сравнение текстов методом простых шинглов" Height="350" Width="525">

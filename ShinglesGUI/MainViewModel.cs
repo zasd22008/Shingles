@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
-using Shingles.Annotations;
+using Shingles.Errors;
+using Shingles.Shingle.Factory;
 
-namespace Shingles
+namespace ShinglesGUI
 {
     public class MainViewModel:INotifyPropertyChanged
     {
@@ -40,7 +34,7 @@ namespace Shingles
                 if (_result != value)
                 {
                     _result = value;
-                    OnPropertyChanged();                                        
+                    OnPropertyChanged("Result");                                        
                 }
             }
         }
@@ -54,7 +48,7 @@ namespace Shingles
                 if (_resultString != value)
                 {
                     _resultString = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged("ResultString");
                 }
             }            
         }
@@ -68,7 +62,7 @@ namespace Shingles
                 if (_isShingles != value)
                 {
                     _isShingles = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged("IsShingles");
                 }
             }
         }
@@ -82,7 +76,7 @@ namespace Shingles
                 if (_isSuperShingles != value)
                 {
                     _isSuperShingles = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged("IsSuperShingles");
                 }
             }
         }
@@ -96,7 +90,7 @@ namespace Shingles
                 if (_isMegaShingles != value)
                 {
                     _isMegaShingles = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged("IsMegaShingles");
                 }
             }
         }
@@ -152,8 +146,7 @@ namespace Shingles
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));

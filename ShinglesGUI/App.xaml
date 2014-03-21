@@ -1,4 +1,4 @@
-﻿<Application x:Class="Shingles.App"
+﻿<Application x:Class="ShinglesGUI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Startup="Application_Startup_1">
     <Application.Resources>

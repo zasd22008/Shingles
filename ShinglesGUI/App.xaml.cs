@@ -5,8 +5,9 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Shingles;
 
-namespace Shingles
+namespace ShinglesGUI
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -21,7 +22,7 @@ namespace Shingles
 
             view.DataContext = viewModel;
 
-            view.Show();
+            view.ShowDialog();
         }
     }
 }
