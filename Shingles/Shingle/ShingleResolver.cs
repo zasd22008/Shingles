@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -25,8 +26,8 @@ namespace Shingles.Shingle
 
         public virtual double CalculateShingles(string firstText, string secondText, int shingleSize)
         {
-            var hashes1 = generateHashes(firstText, shingleSize);
             var hashes2 = generateHashes(secondText, shingleSize);
+            var hashes1 = generateHashes(firstText, shingleSize);
 
             return compare(hashes1, hashes2);
         }
@@ -85,7 +86,35 @@ namespace Shingles.Shingle
             for (int i = 0; i < shingles.Length; i++)
                 shingles[i] = String.Join(" ", getSubArray(words, i, shingleSize));
 
-            return hash_functions.Select(hashFunc => shingles.Select(s => GetHash(s, hashFunc)).Min());
+            var min_hashs = new List<string>();
+
+            var file = File.CreateText(@"shingles.txt");
+            foreach (var hashFunc in hash_functions)
+            {
+                var hashs = shingles.Select(s => GetHash(s, hashFunc)).ToList();
+
+                write_to_file(file, hashs, hashs.IndexOf(hashs.Min()));
+                min_hashs.Add(hashs.Min());
+            }
+
+            file.Flush();
+            file.Close();
+
+            return min_hashs;
+        }
+
+        private void write_to_file(StreamWriter file, List<string> hashs, int minHashIndex)
+        {
+            file.Write(minHashIndex);
+            file.Write("\t\t");
+            
+            for (int i = 0; i < hashs.Count(); i++)
+            {
+                file.Write(i == minHashIndex ? hashs[i].ToUpper() : hashs[i]);
+                file.Write("\t");
+            }   
+
+            file.WriteLine();
         }
 
         protected string GetHash(string str, HashAlgorithm hash_func)
